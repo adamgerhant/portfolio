@@ -117,10 +117,10 @@ const getRequestFromPreset = (preset)=>{
                         createdAt:{selected:false},
                         updatedAt:{selected:false},
                     },
-                    createdAt:{selected:false},
+                    createdAt:{selected:preset=="programming"?true:false},
                     updatedAt:{selected:false},
                 },
-                createdAt: {selected:false}, 
+                createdAt: {selected:true}, 
                 updatedAt: {selected:false}, 
             },
             getEngineeringProjects:{
@@ -142,7 +142,7 @@ const getRequestFromPreset = (preset)=>{
                         createdAt:{selected:false},
                         updatedAt:{selected:false},
                     },
-                    createdAt:{selected:false},
+                    createdAt:{selected:preset=="engineering"?true:false},
                     updatedAt:{selected:false},
                 },
                 createdAt: {selected:false}, 
@@ -624,7 +624,7 @@ const Segment = ({preset}) =>{
                             <div className="text-xl">{response.data.getProgrammingProjects?.description}</div>
                         </div>
                         }
-                        {response.data.getProgrammingProjects.projects.items.sort((a, b) => b.name.localeCompare(a.name)).map(project=>(Object.keys(project).map((key, index)=>{
+                        {response.data.getProgrammingProjects.projects.items.sort((a, b) => a.createdAt.localeCompare(b.createdAt)).map(project=>(Object.keys(project).map((key, index)=>{
                         if(key=="name"){
                             return(
                             <div key={index} className="flex items-center my-4 px-6">
