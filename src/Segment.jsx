@@ -443,7 +443,7 @@ const Segment = ({preset}) =>{
     const responseText = JSON.stringify(response, null, 2)
     return( 
         <div className="px-20 p-10 w-full flex">
-            <div className={`${preset=="about"?"h-[400px]":"min-h-[530px]"} w-[40%] flex shrink-0 rounded border border-white shadow-[0_0_10px_0px_rgba(255,255,255,0.25)]`}>
+            <div className={`${preset=="about"?"h-[430px]":"min-h-[530px]"} w-[40%] flex shrink-0 rounded border border-white shadow-[0_0_10px_0px_rgba(255,255,255,0.25)]`}>
                 <div className="text-white w-[45%] relative flex flex-col">
                     <div className="text-xl border-b b-white flex items-center ">
                         <div className={`px-2 py-1 w-1/2 text-[18px] text-center cursor-pointer ${editTab=="Request"?"bg-white text-slate-950 font-semibold":""}`} onClick={()=>setEditTab("Request")}>
@@ -495,7 +495,7 @@ const Segment = ({preset}) =>{
                     
                 </div>
             </div>
-            <div className={`${preset=="about"?"h-[420px]":"min-h-[530px]"} flex-1 flex-grow overflow-y-auto text-white text-semibold text-xl ml-[100px] rounded shadow-2x border border-white shadow-[0_0_10px_0px_rgba(255,255,255,0.25)]`}>
+            <div className={`${preset=="about"?"h-[430px]":"min-h-[530px]"} flex-1 flex-grow overflow-y-auto text-white text-semibold text-xl ml-[100px] rounded shadow-2x border border-white shadow-[0_0_10px_0px_rgba(255,255,255,0.25)]`}>
             {response.data&&Object.keys(response.data).map(firstKey=>{
                 if(!response.data[firstKey]){
                     return null
@@ -505,7 +505,7 @@ const Segment = ({preset}) =>{
                         if(key=="Title"){
                             const [name, description] = response.data.getAbout[key].split('\\n');
                             return(
-                                <div key={index} className="flex items-center my-2 px-6">
+                                <div key={index} className="flex items-baseline my-2 px-6">
                                     <p className="text-2xl w-[110px]">{key}</p>
                                     <div>
                                         <div className="text-5xl ">{name}</div>
@@ -526,7 +526,7 @@ const Segment = ({preset}) =>{
                         }
                         if(key=="About"){
                             return(
-                            <div key={index} className="flex items-center my-4 px-6">
+                            <div key={index} className="flex items-baseline my-4 px-6">
                                 <p className="text-2xl w-[110px] shrink-0">About</p>
                                 <div>
                                     <div className="text-lg">{response.data.getAbout[key]}</div>
@@ -554,10 +554,10 @@ const Segment = ({preset}) =>{
                         }
                         if(key=="Contact"){
                             return(
-                                <div className="flex items-center my-4 px-6">
+                                <div className="flex items-baseline mt-4 px-6">
                                     <p className="text-2xl w-[110px] shrink-0">Contact</p>
                                     <div>
-                                        <div className="text-xl">{response.data.getAbout[key]}</div>
+                                        <div className="text-lg">{response.data.getAbout[key]}</div>
                                     </div>
                                 </div>
                             )
@@ -619,7 +619,7 @@ const Segment = ({preset}) =>{
                     return (
                        <>
                         {response.data.getProgrammingProjects.description&&
-                        <div className="flex items-center my-4 px-6">
+                        <div className="flex items-baseline my-4 px-6">
                             <p className="text-xl w-[110px] shrink-0">Description</p>
                             <div className="text-xl">{response.data.getProgrammingProjects?.description}</div>
                         </div>
@@ -627,7 +627,7 @@ const Segment = ({preset}) =>{
                         {response.data.getProgrammingProjects.projects.items.sort((a, b) => a.createdAt.localeCompare(b.createdAt)).map(project=>(Object.keys(project).map((key, index)=>{
                         if(key=="name"){
                             return(
-                            <div key={index} className="flex items-center my-4 px-6">
+                            <div key={index} className="flex items-baseline my-4 px-6">
                                 <p className="text-2xl w-[110px]">Name</p>
                                 <div className="text-4xl">{project[key]}</div>
                             </div>
@@ -635,7 +635,7 @@ const Segment = ({preset}) =>{
                         }
                         if(key=="url"){
                             return(
-                            <div key={index} className="flex items-center my-4 px-6">
+                            <div key={index} className="flex items-baseline my-4 px-6">
                                 <p className="text-2xl w-[110px]">Url</p>
                                 <a href={project[key]} target="_blank" rel="noopener">
                                     <div className="text-xl text-blue-400 underline">{project[key].slice(8)}</div>
@@ -645,17 +645,9 @@ const Segment = ({preset}) =>{
                         }
                         if(key=="about"){
                             return(
-                            <div key={index} className="flex items-center my-4 px-6">
+                            <div key={index} className="flex items-baseline my-4 px-6">
                                 <p className="text-2xl w-[110px] shrink-0">About</p>
-                                <div className="text-lg">{project[key]}</div>
-                            </div>
-                            )
-                        }
-                        if(key=="usage"){
-                            return(
-                            <div key={index} className="flex items-center my-4 px-6">
-                                <p className="text-2xl w-[110px] shrink-0">Usage</p>
-                                <div className="text-lg">{project[key]}</div>
+                                <div className="text-lg">{project[key].replace(/\\n/g, '\n').split('\n').map((line, i) => <><span key={i}>{line}</span><br/></>)}</div>
                             </div>
                             )
                         }
@@ -671,18 +663,19 @@ const Segment = ({preset}) =>{
                     )
                 }
                 if(firstKey=="getEngineeringProjects"){
-                    return (response.data.getOpenSource.projects.items.sort((a, b) => b.name.localeCompare(a.name)).map(project=>(Object.keys(project).map((key, index)=>{
+                    return (response.data.getEngineeringProjects.projects.items.sort((a, b) => a.createdAt.localeCompare(b.createdAt)).map(project=>(Object.keys(project).map((key, index)=>{
+                        
                         if(key=="name"){
                             return(
-                            <div key={index} className="flex items-center my-4 px-6">
+                            <div key={index} className="flex items-baseline my-4 px-6">
                                 <p className="text-2xl w-[110px]">Name</p>
                                 <div className="text-4xl">{project[key]}</div>
                             </div>
                             )
                         }
-                        if(key=="url"){
+                        if(key=="url"&& project[key]){
                             return(
-                            <div key={index} className="flex items-center my-4 px-6">
+                            <div key={index} className="flex items-baseline my-4 px-6">
                                 <p className="text-2xl w-[110px]">Url</p>
                                 <a href={project[key]} target="_blank" rel="noopener">
                                     <div className="text-xl text-blue-400 underline">{project[key].slice(8)}</div>
@@ -692,15 +685,15 @@ const Segment = ({preset}) =>{
                         }
                         if(key=="about"){
                             return(
-                            <div key={index} className="flex items-center my-4 px-6">
+                            <div key={index} className="flex items-baseline my-4 px-6">
                                 <p className="text-2xl w-[110px] shrink-0">About</p>
-                                <div className="text-lg">{project[key]}</div>
+                                <div className="text-lg">{project[key].replace(/\\n/g, '\n').split('\n').map((line, i) => <><span key={i}>{line}</span><br/></>)}</div>
                             </div>
                             )
                         }
                         if(key=="usage"){
                             return(
-                            <div key={index} className="flex items-center my-4 px-6">
+                            <div key={index} className="flex items-baseline my-4 px-6">
                                 <p className="text-2xl w-[110px] shrink-0">Usage</p>
                                 <div className="text-lg">{project[key]}</div>
                             </div>
@@ -723,7 +716,7 @@ const Segment = ({preset}) =>{
                         }
                         if(key=="name"){
                             return(
-                            <div key={index} className="flex items-center my-4 px-6">
+                            <div key={index} className="flex items-baseline my-4 px-6">
                                 <p className="text-2xl w-[110px]">Name</p>
                                 <div className="text-4xl">{project[key]}</div>
                             </div>
@@ -731,7 +724,7 @@ const Segment = ({preset}) =>{
                         }
                         if(key=="url"){
                             return(
-                            <div key={index} className="flex items-center my-4 px-6">
+                            <div key={index} className="flex items-baseline my-4 px-6">
                                 <p className="text-2xl w-[110px]">Url</p>
                                 <a href={project[key]} target="_blank" rel="noopener">
                                     <div className="text-xl text-blue-400 underline">{project[key].slice(8)}</div>
@@ -741,9 +734,9 @@ const Segment = ({preset}) =>{
                         }
                         if(key=="about"){
                             return(
-                            <div key={index} className="flex items-center my-4 px-6">
+                            <div key={index} className="flex items-baseline my-4 px-6">
                                 <p className="text-2xl w-[110px] shrink-0">About</p>
-                                <div className="text-lg">{project[key]}</div>
+                                <div className="text-lg">{project[key].replace(/\\n/g, '\n').split('\n').map((line, i) => <><span key={i}>{line}</span><br/></>)}</div>
                             </div>
                             )
                         }
@@ -763,7 +756,7 @@ const Segment = ({preset}) =>{
                         Object.keys(article).map((key, index)=>{
                             if(key=="title"){
                                 return(
-                                    <div key={index} className="flex items-center my-4 ml-6">
+                                    <div key={index} className="flex items-baseline my-4 ml-6">
                                         <p className="text-2xl w-[115px] shrink-0">Title</p>
                                         <div className="text-3xl">{article[key]}</div>
                                     </div>
@@ -772,7 +765,7 @@ const Segment = ({preset}) =>{
                             
                             if(key=="summary"){
                                 return(
-                                    <div key={index} className="flex items-center my-4 ml-6">
+                                    <div key={index} className="flex items-baseline my-4 ml-6">
                                         <p className="text-2xl w-[115px] shrink-0">Summary</p>
                                         <div className="text-lg">{article[key]}</div>
                                     </div>
@@ -780,7 +773,7 @@ const Segment = ({preset}) =>{
                             }
                             if(key=="url"){
                                 return(
-                                    <div key={index} className="flex items-center my-4 px-6">
+                                    <div key={index} className="flex items-baseline my-4 px-6">
                                         <p className="text-2xl w-[115px] shrink-0">Url</p>
                                         <a href={article[key]} target="_blank" rel="noopener">
                                             <div className="text-xl text-blue-400 underline">{article[key].slice(8)}</div>
@@ -790,9 +783,9 @@ const Segment = ({preset}) =>{
                             }
                             if(key=="image"){
                                 return(
-                                    <div key={index} className="flex items-center mb-8 my-4 ml-6">
+                                    <div key={index} className="flex items-start mb-8 my-4 ml-6">
                                         <p className="text-2xl w-[115px] shrink-0">Image</p>
-                                        <div className="text-xl">                                
+                                        <div className="text-xl">
                                             <ImageSlider images={[article[key]]}/>
                                         </div>
                                     </div>
